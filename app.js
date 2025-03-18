@@ -1,50 +1,33 @@
-var toggle_btn;
-var big_wrapper;
-var hamburger_menu;
+// Theme Toggle
+const themeToggle = document.getElementById('theme-toggle');
+const appContainer = document.getElementById('app-container');
 
-function declare() {
-  toggle_btn = document.querySelector(".toggle-btn");
-  big_wrapper = document.querySelector(".big-wrapper");
-  hamburger_menu = document.querySelector(".hamburger-menu");
+themeToggle.addEventListener('click', () => {
+  appContainer.classList.toggle('dark');
+  localStorage.setItem('theme', appContainer.classList.contains('dark') ? 'dark' : 'light');
+});
+
+// Set initial theme
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme === 'dark') {
+  appContainer.classList.add('dark');
 }
 
-const main = document.querySelector("main");
+// Mobile Menu Toggle
+const menuToggle = document.getElementById('menu-toggle');
+const mobileNav = document.querySelector('.mobile-nav');
 
-declare();
+menuToggle.addEventListener('click', () => {
+  menuToggle.classList.toggle('active');
+  mobileNav.classList.toggle('active');
+});
 
-let dark = false;
-
-function toggleAnimation() {
-  // Clone the wrapper
-  dark = !dark;
-  let clone = big_wrapper.cloneNode(true);
-  if (dark) {
-    clone.classList.remove("light");
-    clone.classList.add("dark");
-  } else {
-    clone.classList.remove("dark");
-    clone.classList.add("light");
-  }
-  clone.classList.add("copy");
-  main.appendChild(clone);
-
-  document.body.classList.add("stop-scrolling");
-
-  clone.addEventListener("animationend", () => {
-    document.body.classList.remove("stop-scrolling");
-    big_wrapper.remove();
-    clone.classList.remove("copy");
-    // Reset Variables
-    declare();
-    events();
+// Smooth Scrolling
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    e.preventDefault();
+    document.querySelector(this.getAttribute('href')).scrollIntoView({
+      behavior: 'smooth'
+    });
   });
-}
-
-function events() {
-  toggle_btn.addEventListener("click", toggleAnimation);
-  hamburger_menu.addEventListener("click", () => {
-    big_wrapper.classList.toggle("active");
-  });
-}
-
-events();
+});
